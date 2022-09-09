@@ -17,3 +17,11 @@ TEST(IndTest, genome_corectness) {
     EXPECT_EQ (individual.get_gen(3),  3);
 
 }
+TEST(IndTest, operators) {
+    Individual individual1 = Individual(5, nullptr);
+    Individual individual2 = Individual(5, nullptr);
+    individual1.change_adatpation(0.8);
+    individual2.change_adatpation(0.5);
+    EXPECT_TRUE(individual2 < individual1);
+    EXPECT_FALSE(individual1 == individual2);
+}

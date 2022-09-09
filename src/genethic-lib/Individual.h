@@ -17,6 +17,7 @@ public:
     int *get_genotype();
     void change_adatpation(double adaptation);
     bool operator <(const Individual &individual);
+    bool operator == (const Individual &individual);
     void mutation_insert(int p, int q);
     void mutation_swap(int p, int q);
     void mutation_invert(int p, int q);

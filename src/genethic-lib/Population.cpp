@@ -102,11 +102,25 @@ bool Population::does_not_contain_a_gene(const int *tabu, int x, int p, int q) {
 }
 
 int Population::objective_function(Individual individual) {
-    return 0;
+    int f = distances[individual.get_gen(0)][individual.get_gen(individual.size - 1)];
+
+    for (int i = 0; i < individual.size - 1; i++) {
+        f += distances[individual.get_gen(i)][individual.get_gen(i + 1)];
+    }
+
+    return f;
 }
 
 Individual Population::find_alpha() {
-    return Individual(0, nullptr);
+    Individual best_invidual = population[0];
+
+    double best_of = objective_function(population[0]);
+    for (Individual individual : population) {
+        if (objective_function(individual) < best_of) {
+            best_invidual = best_invidual;
+        }
+    }
+    return best_invidual;
 }
 
 void Population::init(Individual pioneer) {
@@ -116,12 +130,44 @@ void Population::init(Individual pioneer) {
     }
 }
 
-void Population::mutate_population(double probability) {
-
+void Population::mutate_population(double probability, std::string type) {
+    double r;
+    std::uniform_real_distribution<double> realDistribution(0,1);
+    std::uniform_int_distribution<int> intDistribution(0,population[0].size);
+    if (type == "invert") {
+        for (Individual individual : population) {
+            r = realDistribution(generator);
+            if (r < probability) {
+                individual.mutation_invert(intDistribution(generator)%individual.size/2, 2*(intDistribution(generator)%individual.size/2));
+            }
+        }
+    } else if (type == "insert") {
+        for (Individual individual : population) {
+            r = realDistribution(generator);
+            if (r < probability) {
+                individual.mutation_insert(intDistribution(generator)%individual.size/2, 2*(intDistribution(generator)%individual.size/2));
+            }
+        }
+    } else if (type == "swap") {
+        for (Individual individual : population) {
+            r = realDistribution(generator);
+            if (r < probability) {
+                individual.mutation_swap(intDistribution(generator)%individual.size/2, 2*(intDistribution(generator)%individual.size/2));
+            }
+        }
+    }
 }
 
-void Population::do_crossing() {
+void Population::do_crossing(std::string type) {
+    int i = 0;
 
+    if (type == "order") {
+        while (i < 0.8*size_of_population) {
+            for (int j = 0; j < size_of_population - 1; j++) {
+               // if (parents[j] < )
+            }
+        }
+    }
 }
 
 void Population::print_population(int type) {
@@ -167,7 +213,17 @@ void Population::selection_by_tournament() {
 }
 
 void Population::resolve_adaptation() {
+    double best_adapted = objective_function(population[0]);
 
+    for (Individual individual : population) {
+        if (objective_function(individual) < best_adapted) {
+            best_adapted = objective_function(individual);
+        }
+    }
+
+    for (Individual individual : population) {
+        individual.change_adatpation(best_adapted/ objective_function(individual));
+    }
 }
 
 int Population::get_objective_function() {

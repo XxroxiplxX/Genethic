@@ -9,6 +9,7 @@
 #include <random>
 #include "Individual.h"
 #include "vector"
+#include "string"
 class Population {
 private:
     std::mt19937 generator;
@@ -28,8 +29,8 @@ public:
     std::vector<Individual> order_crossover(Individual parent1, Individual parent2);
     Population(Individual pioneer, int **distances, int size_of_population, double roulette_crit);
     void init(Individual pioneer);
-    void mutate_population(double probability);
-    void do_crossing();
+    void mutate_population(double probability, std::string type);
+    void do_crossing(std::string type);
     void print_population(int type);
     void selection_by_roulette();
     void selection_by_tournament();
