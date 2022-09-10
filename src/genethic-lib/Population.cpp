@@ -217,7 +217,14 @@ void Population::selection_by_tournament() {
             indexes[j] = distribution(generator);
         }
         best = objective_function(population[indexes[0]]);
-
+        for (int j = 1; j < group; j++) {
+            if (objective_function(population[indexes[j]]) < best) {
+                best = objective_function(population[indexes[j]]);
+                k = j;  //na k-tej pozycji w tablicy indeksow jesty indeks z tablicy population zwyciezcy turnieju
+            }
+        }
+        parents.push_back(population[indexes[k]]);
+        i++;
     }
 }
 
