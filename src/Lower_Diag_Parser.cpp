@@ -2,11 +2,11 @@
 // Created by piotrkali on 9/9/22.
 //
 
-#include "Parser.h"
+#include "Lower_Diag_Parser.h"
 #include "string"
 #include "iostream"
 using namespace std;
-void Parser::read(const std::string file_name) {
+void Lower_Diag_Parser::read(const std::string file_name) {
     fstream stream;
     stream.open("/home/piotrkali/projects/CLionProjects/Genethic/resources/" + file_name);
     std::string text;
@@ -48,7 +48,7 @@ void Parser::read(const std::string file_name) {
     stream.close();
 }
 
-void Parser::read_dimension() {
+void Lower_Diag_Parser::read_dimension() {
     fstream stream;
     stream.open("/home/piotrkali/projects/CLionProjects/Genethic/resources/" + file);
     std::string text;
@@ -63,7 +63,7 @@ void Parser::read_dimension() {
     }
 }
 
-int **Parser::build_matrix() {
+int **Lower_Diag_Parser::build_matrix() {
     int **matrix;
     matrix = new int*[dimension];
     for (int i = 0; i < dimension; i++) {

@@ -2,18 +2,18 @@
 // Created by piotrkali on 9/9/22.
 //
 
-#ifndef GENETHIC_PARSER_H
-#define GENETHIC_PARSER_H
+#ifndef GENETHIC_LOWER_DIAG_PARSER_H
+#define GENETHIC_LOWER_DIAG_PARSER_H
 
 #include "fstream"
 #include "Abstract_Parser.h"
-class Parser : public Abstract_Parser{
+class Lower_Diag_Parser : public Abstract_Parser{
 public:
     bool cracked;
     int **matrixt;
     int dimension;
     std::string file;
-    Parser(std::string file) : file(file) {}
+    Lower_Diag_Parser(std::string file) : file(file) {}
     void read(const std::string file_name);
     void read_dimension() override;
     int** build_matrix() override;
@@ -21,4 +21,4 @@ public:
 };
 
 
-#endif //GENETHIC_PARSER_H
+#endif //GENETHIC_LOWER_DIAG_PARSER_H
