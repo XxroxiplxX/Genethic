@@ -14,7 +14,7 @@ class Population {
 private:
     std::mt19937 generator;
     int **distances ;
-    std::vector<Individual> population;
+    //std::vector<Individual> population;
     std::vector<Individual> parents;
     int size_of_population;
     double roulette_crit;
@@ -25,6 +25,8 @@ private:
     Individual find_alpha();
 
 public:
+    std::vector<Individual> population;
+    static bool comparator(const Individual& left, const Individual& right);
     std::vector<Individual> order_crossover_slow(Individual parent1, Individual parent2);
     std::vector<Individual> order_crossover(Individual parent1, Individual parent2);
     Population(Individual pioneer, int **distances, int size_of_population, double roulette_crit);

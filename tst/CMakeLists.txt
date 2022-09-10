@@ -4,7 +4,7 @@ file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.h *.cpp)
 
 set(SOURCES ${TEST_SOURCES})
 
-add_executable(${BINARY} ${TEST_SOURCES} Individual-test.cpp Population-test.cpp)
+add_executable(${BINARY} ${TEST_SOURCES} Individual-test.cpp Population-test.cpp Parser-test.cpp)
 
 add_test(NAME ${BINARY} COMMAND ${BINARY})
 

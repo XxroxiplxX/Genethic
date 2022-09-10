@@ -6,4 +6,4 @@ set(SOURCES ${SOURCES})
 
 add_executable(${BINARY}_run ${SOURCES})
 
-add_library(${BINARY}_lib STATIC ${SOURCES} genethic-lib/Individual.cpp genethic-lib/Individual.h genethic-lib/Population.cpp genethic-lib/Population.h)
+add_library(${BINARY}_lib STATIC ${SOURCES} genethic-lib/Individual.cpp genethic-lib/Individual.h genethic-lib/Population.cpp genethic-lib/Population.h Parser.cpp Parser.h Abstract_Parser.h)

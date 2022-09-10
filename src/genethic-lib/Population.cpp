@@ -2,6 +2,7 @@
 // Created by piotrkali on 9/7/22.
 //
 
+#include <algorithm>
 #include "Population.h"
 #include "iostream"
 #include "thread"
@@ -19,9 +20,7 @@ int *Population::permutation(int *arg, int size) {
     int *pi = new int[size];
     for (int i = 0; i < size; i++) {
         pi[i] = arg[i];
-
     }
-
     for (int i = 0; i < size; i++) {
         int tmp1 = pi[i];
         int r = distribution(generator);
@@ -160,13 +159,23 @@ void Population::mutate_population(double probability, std::string type) {
 
 void Population::do_crossing(std::string type) {
     int i = 0;
-
+    vector<Individual> children;
     if (type == "order") {
         while (i < 0.8*size_of_population) {
             for (int j = 0; j < size_of_population - 1; j++) {
-               // if (parents[j] < )
+                if (!(parents[j] == parents[j + 1]) and i < 0.8*size_of_population) {
+                    children = order_crossover(parents[j], parents[j + 1]);
+                    population[i] = children[0];
+                    population[i + 1] = children[1];
+                    i += 2;
+                }
             }
         }
+        std::sort(parents.begin(), parents.end(), &comparator);
+        for (int j = size_of_population - 1; j > 0.8*size_of_population - 1; j--) {
+            population[j] = parents[j];
+        }
+        parents.clear();
     }
 }
 
@@ -309,4 +318,8 @@ std::vector<Individual> Population::order_crossover_slow(Individual parent1, Ind
     chiildren.push_back(Individual(parent1.size, osrping1));
     chiildren.push_back(Individual(parent1.size, osrping2));
     return chiildren;
+}
+
+bool Population::comparator(const Individual &left, const Individual &right) {
+    return &left < &right;
 }
