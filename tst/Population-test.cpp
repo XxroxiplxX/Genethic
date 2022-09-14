@@ -5,6 +5,8 @@
 #include "genethic-lib/Individual.h"
 #include "genethic-lib/Population.h"
 #include "algorithm"
+#include "Lower_Diag_Parser.h"
+
 TEST(Poptest, populationgen) {
     int k = 100;
     int **distances = nullptr;
@@ -14,9 +16,11 @@ TEST(Poptest, populationgen) {
         data[i] = i;
         data2[i] = k - i;
     }
+    std::vector<std::string> cryts =  {"tournament", "order", "invert"};
+
     Individual second = Individual(k, data2);
-    Individual pioneer = Individual(k, data);
-    Population population = Population(pioneer, distances, k, 0.8, 0.4);
+    Individual *pioneer = new Individual(k, data);
+    Population population = Population(pioneer, distances, k, 0.8, 0.4, cryts);
     Individual individual1 = Individual(5, nullptr);
     Individual individual2 = Individual(5, nullptr);
     individual1.change_adatpation(0.8);
@@ -25,9 +29,9 @@ TEST(Poptest, populationgen) {
 }
 TEST(Poptest, copmarator) {
     Individual individual1 = Individual(5, nullptr);
-    Individual individual2 = Individual(5, nullptr);
+    Individual *individual2 = new Individual(5, nullptr);
     individual1.change_adatpation(0.8);
-    individual2.change_adatpation(0.5);
+    individual2->change_adatpation(0.5);
     int k = 100;
     int **distances = nullptr;
     int *data = new int[k];
@@ -36,8 +40,9 @@ TEST(Poptest, copmarator) {
         data[i] = i;
         data2[i] = k - i;
     }
-    Population population = Population(individual2, distances, k, 0.8, 0.3);
-    EXPECT_TRUE(population.comparator(individual1, individual2));
+    std::vector<std::string> cryts =  {"tournament", "order", "invert"};
+    Population population = Population(individual2, distances, k, 0.8, 0.3, cryts);
+    EXPECT_TRUE(population.comparator(individual1, *individual2));
 }
 
 TEST(Poptest, sorting) {
@@ -53,7 +58,24 @@ TEST(Poptest, sorting) {
     for (int i = 0; i < 10; i++) {
         data[i] = i;
     }
-    Individual individual = Individual(10, data);
-    Population population = Population(individual, distances, k, 0.8, 0.4);
-    population.do_crossing("order");
+    std::vector<std::string> cryts =  {"tournament", "order", "invert"};
+
+    Individual *individual = new Individual(10, data);
+    Population population = Population(individual, distances, k, 0.8, 0.4, cryts);
+
+}
+
+TEST(PopTest, get_alpha_test) {
+    Lower_Diag_Parser parser = Lower_Diag_Parser("gr17.tsp");
+    parser.read_dimension();
+    int **p = parser.build_matrix();
+    int *data = new int[17];
+    for (int i = 0; i < 17; i++) {
+        data[i] = i;
+    }
+    Individual *individual = new Individual(17, data);
+    std::vector<std::string> cryts =  {"tournament", "order", "invert"};
+    Population *population =new Population(individual, p, 20, 0.8, 0.4, cryts);
+    population->resolve_adaptation();
+    population->get_alpha()->print_individual();
 }

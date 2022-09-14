@@ -11,6 +11,7 @@
 #include "vector"
 #include "string"
 #include "mutex"
+#include "iostream"
 class Population {
 private:
     std::mt19937 generator;
@@ -24,23 +25,27 @@ private:
     static bool does_not_contain_a_gene(const int *tabu, int x, int p, int q);
     int objective_function(Individual individual);
     Individual find_alpha();
-
+    std::string type_of_selection;
+    std::string type_of_crossing;
+    std::string type_of_mutation;
 public:
     std::vector<Individual> population;
     static bool comparator(const Individual& left, const Individual& right);
     std::vector<Individual> order_crossover_slow(Individual parent1, Individual parent2);
     std::vector<Individual> order_crossover(Individual parent1, Individual parent2);
-    Population(Individual pioneer, int **distances, int size_of_population, double roulette_crit, double ppb_of_mutation);
-    void init(Individual pioneer);
-    void mutate_population(std::string type);
-    void do_crossing(std::string type);
+    Population(Individual *pioneer, int **distances, int size_of_population,
+               double roulette_crit, double ppb_of_mutation,const std::vector<std::string> &cryts);
+    void init(Individual *pioneer);
+    void mutate_population();
+    void mutate_population(double probability);
+    void do_crossing();
     void print_population(int type);
     void selection_by_roulette();
     void selection_by_tournament();
     void resolve_adaptation();
     int get_objective_function();
-    Individual get_alpha();
-    void do_selection(std::string type);
+    Individual *get_alpha();
+    void do_selection();
 
 };
 

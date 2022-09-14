@@ -25,3 +25,13 @@ TEST(IndTest, operators) {
     EXPECT_TRUE(individual2 < individual1);
     EXPECT_FALSE(individual1 == individual2);
 }
+TEST(IndTest, operators_on_pointers) {
+    Individual individual1 = Individual(5, nullptr);
+    Individual *individual2 = new Individual(5, nullptr);
+    individual1.change_adatpation(0.8);
+    individual2->change_adatpation(0.5);
+    EXPECT_TRUE(*individual2 < individual1);
+    EXPECT_FALSE(individual1 == *individual2);
+    individual2->change_adatpation(0.8);
+    EXPECT_TRUE(*individual2 == individual1);
+}

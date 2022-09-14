@@ -27,7 +27,7 @@ void Individual::change_adatpation(double adaptation) {
     this->adaptation = adaptation;
 }
 
-bool Individual::operator<(const Individual &individual) {
+bool Individual::operator<(const Individual &individual) const{
     if (this->adaptation < individual.adaptation) {
         return true;
     } else {
@@ -59,7 +59,7 @@ void Individual::print_individual() {
     for (int i = 0; i < size; i++) {
         std::cout << genotype[i] << " ";
     }
-    std::cout << "\n";
+    std::cout << "    " << adaptation << "\n";
 }
 
 bool Individual::operator==(const Individual &individual) const {
@@ -67,4 +67,13 @@ bool Individual::operator==(const Individual &individual) const {
         return true;
     } else return false;
 }
+
+void Individual::show_time() {
+    std::cout << this << std::endl;
+
+}
+
+
+
+
 

@@ -15,8 +15,9 @@ private:
     int best_known;
     double ppb_of_mutation;
     int id;
+    int rounds;
 public:
-    Habitat(int **matrix, int *parameters, std::string *cryteriums, std::vector<std::string> results, double *d_parameters);
+    Habitat(int **matrix, int *parameters, const std::vector<std::string> &cryts, std::vector<std::string> results, double *d_parameters);
     void evolve() ;
 };
 
