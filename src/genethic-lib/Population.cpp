@@ -3,11 +3,13 @@
 //
 
 #include <algorithm>
+#include <mutex>
 #include "Population.h"
 #include "iostream"
 #include "thread"
 using namespace std;
-Population::Population(Individual pioneer, int **distances, int size_of_population, double roulette_crit) : size_of_population(size_of_population), roulette_crit(roulette_crit), distances(distances) {
+Population::Population(Individual pioneer, int **distances, int size_of_population, double roulette_crit, double ppb_of_mutation) :
+size_of_population(size_of_population), roulette_crit(roulette_crit), distances(distances), ppb_of_mutation(ppb_of_mutation) {
     srand(time(nullptr));
     generator = std::mt19937(random());
     population = std::vector<Individual>();
@@ -101,12 +103,14 @@ bool Population::does_not_contain_a_gene(const int *tabu, int x, int p, int q) {
 }
 
 int Population::objective_function(Individual individual) {
+    std::mutex m;
+    m.lock();
     int f = distances[individual.get_gen(0)][individual.get_gen(individual.size - 1)];
 
     for (int i = 0; i < individual.size - 1; i++) {
         f += distances[individual.get_gen(i)][individual.get_gen(i + 1)];
     }
-
+    m.unlock();
     return f;
 }
 
@@ -129,28 +133,28 @@ void Population::init(Individual pioneer) {
     }
 }
 
-void Population::mutate_population(double probability, std::string type) {
+void Population::mutate_population(std::string type) {
     double r;
     std::uniform_real_distribution<double> realDistribution(0,1);
     std::uniform_int_distribution<int> intDistribution(0,population[0].size);
     if (type == "invert") {
         for (Individual individual : population) {
             r = realDistribution(generator);
-            if (r < probability) {
+            if (r < ppb_of_mutation) {
                 individual.mutation_invert(intDistribution(generator)%individual.size/2, 2*(intDistribution(generator)%individual.size/2));
             }
         }
     } else if (type == "insert") {
         for (Individual individual : population) {
             r = realDistribution(generator);
-            if (r < probability) {
+            if (r < ppb_of_mutation) {
                 individual.mutation_insert(intDistribution(generator)%individual.size/2, 2*(intDistribution(generator)%individual.size/2));
             }
         }
     } else if (type == "swap") {
         for (Individual individual : population) {
             r = realDistribution(generator);
-            if (r < probability) {
+            if (r < ppb_of_mutation) {
                 individual.mutation_swap(intDistribution(generator)%individual.size/2, 2*(intDistribution(generator)%individual.size/2));
             }
         }
@@ -329,4 +333,12 @@ std::vector<Individual> Population::order_crossover_slow(Individual parent1, Ind
 
 bool Population::comparator(const Individual &left, const Individual &right) {
     return &left < &right;
+}
+
+void Population::do_selection(std::string type) {
+    if (type == "tourn") {
+        selection_by_tournament();
+    } else if (type == "roullette") {
+        selection_by_roulette();
+    }
 }

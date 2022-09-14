@@ -9,10 +9,14 @@
 #include "Individual.h"
 class Habitat {
 private:
-    Population population;
-
+    Population *population;
+    int **matrix;
+    Individual *pioneer;
+    int best_known;
+    double ppb_of_mutation;
+    int id;
 public:
-    Habitat(int **matrix, int *parameters, std::string *cryteriums);
+    Habitat(int **matrix, int *parameters, std::string *cryteriums, std::vector<std::string> results, double *d_parameters);
     void evolve() ;
 };
 

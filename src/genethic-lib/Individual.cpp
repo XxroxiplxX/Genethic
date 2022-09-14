@@ -62,7 +62,7 @@ void Individual::print_individual() {
     std::cout << "\n";
 }
 
-bool Individual::operator==(const Individual &individual) {
+bool Individual::operator==(const Individual &individual) const {
     if (this->adaptation == individual.adaptation) {
         return true;
     } else return false;

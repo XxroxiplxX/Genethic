@@ -16,7 +16,7 @@ TEST(Poptest, populationgen) {
     }
     Individual second = Individual(k, data2);
     Individual pioneer = Individual(k, data);
-    Population population = Population(pioneer, distances, k, 0.8);
+    Population population = Population(pioneer, distances, k, 0.8, 0.4);
     Individual individual1 = Individual(5, nullptr);
     Individual individual2 = Individual(5, nullptr);
     individual1.change_adatpation(0.8);
@@ -36,7 +36,7 @@ TEST(Poptest, copmarator) {
         data[i] = i;
         data2[i] = k - i;
     }
-    Population population = Population(individual2, distances, k, 0.8);
+    Population population = Population(individual2, distances, k, 0.8, 0.3);
     EXPECT_TRUE(population.comparator(individual1, individual2));
 }
 
@@ -54,6 +54,6 @@ TEST(Poptest, sorting) {
         data[i] = i;
     }
     Individual individual = Individual(10, data);
-    Population population = Population(individual, distances, k, 0.8);
+    Population population = Population(individual, distances, k, 0.8, 0.4);
     population.do_crossing("order");
 }
